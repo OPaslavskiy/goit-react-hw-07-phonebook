@@ -6,7 +6,7 @@ import { object, string } from 'yup';
 import Notiflix from 'notiflix';
 
 import { addContact } from '../../redux/operation';
-import { getContacts } from '../../redux/selectors';
+import { selectContacts } from '../../redux/selectors';
 
 import {
   FormSection,
@@ -29,7 +29,7 @@ const userSchema = object({
 
 export const AddContactForm = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
 
   function handleSubmit(values, { resetForm }) {
     const isName = contacts.some(
