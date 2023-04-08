@@ -6,7 +6,7 @@ import { object, string } from 'yup';
 import Notiflix from 'notiflix';
 
 import { addContact } from '../../redux/operation';
-import { selectContacts } from '../../redux/selectors';
+import { selectContacts, selectError } from '../../redux/selectors';
 
 import {
   FormSection,
@@ -28,6 +28,7 @@ const userSchema = object({
 });
 
 export const AddContactForm = () => {
+  const error = useSelector(selectError);
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
 
@@ -43,6 +44,10 @@ export const AddContactForm = () => {
       dispatch(addContact(values));
       resetForm();
     }
+  }
+
+  if (error) {
+    Notiflix.Notify.failure(`${error}`);
   }
 
   return (
