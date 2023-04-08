@@ -1,9 +1,11 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { Formik } from 'formik';
 import { object, string } from 'yup';
-import { addContact } from 'redux/contactSlice';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import Notiflix from 'notiflix';
+
+import { addContact } from '../../redux/operation';
 import { getContacts } from '../../redux/selectors';
 
 import {
@@ -14,14 +16,12 @@ import {
   ErrorM,
 } from './AddContactForm.styled';
 
-import Notiflix from 'notiflix';
-
 const phoneRegExp =
   /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/;
 
 const userSchema = object({
-  nameContact: string().required().min(2).max(30),
-  number: string().matches(
+  name: string().required().min(2).max(30),
+  phone: string().matches(
     phoneRegExp,
     'Phone number must be digits and can contain spaces, dashes, parentheses and can start with +'
   ),
@@ -33,15 +33,14 @@ export const AddContactForm = () => {
 
   function handleSubmit(values, { resetForm }) {
     const isName = contacts.some(
-      contact => contact.name.toLowerCase() === values.nameContact.toLowerCase()
+      contact => contact.name.toLowerCase() === values.name.toLowerCase()
     );
 
     if (isName) {
-      Notiflix.Notify.info(`${values.nameContact} is already in contacts`);
+      Notiflix.Notify.info(`${values.name} is already in contacts`);
       return;
     } else {
       dispatch(addContact(values));
-      console.log(values);
       resetForm();
     }
   }
@@ -54,17 +53,17 @@ export const AddContactForm = () => {
         Create a contact
       </h2>
       <Formik
-        initialValues={{ nameContact: '', number: '' }}
+        initialValues={{ name: '', phone: '' }}
         onSubmit={handleSubmit}
         validationSchema={userSchema}
       >
         <FormSection>
           <TitleForForm>Name</TitleForForm>
-          <Input type="text" name="nameContact" required></Input>
-          <ErrorM name="nameContact" component="div" />
+          <Input type="text" name="name" required></Input>
+          <ErrorM name="name" component="div" />
           <TitleForForm>Phone</TitleForForm>
-          <Input type="tel" name="number" required></Input>
-          <ErrorM name="number" component="div" />
+          <Input type="tel" name="phone" required></Input>
+          <ErrorM name="phone" component="div" />
           <Btn type="submit">Add contact</Btn>
         </FormSection>
       </Formik>

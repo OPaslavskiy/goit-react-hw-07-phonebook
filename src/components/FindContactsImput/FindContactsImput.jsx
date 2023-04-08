@@ -1,7 +1,10 @@
 import React from 'react';
-import { FilterDiv, TitleForLabel, Input } from './FindContactsImput.styled';
 import { useDispatch } from 'react-redux';
+
 import { setFilter } from 'redux/filterSlice';
+
+import { FilterDiv, TitleForLabel, Input } from './FindContactsImput.styled';
+
 export const FindContactsInput = () => {
   const dispatch = useDispatch();
 

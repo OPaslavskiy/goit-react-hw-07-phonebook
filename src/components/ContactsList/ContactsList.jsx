@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
 import { getContacts, getFilter } from '../../redux/selectors';
-import { useSelector } from 'react-redux';
+import { fetchContacts, deleteContact } from '../../redux/operation';
+
 import { List, Item, Btn, Name } from './ContactsList.styled';
-import { useDispatch } from 'react-redux';
-import { deleteContact } from 'redux/contactSlice';
 
 export const ContactsList = () => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   const contacts = useSelector(getContacts);
   const filter = useSelector(getFilter);
@@ -19,10 +24,10 @@ export const ContactsList = () => {
         Сontact list
       </h2>
       <List>
-        {filterContact.map(({ name, number, id }) => (
+        {filterContact.map(({ name, phone, id }) => (
           <Item key={id}>
             <Name>{name}</Name>
-            <p>{number}</p>
+            <p>{phone}</p>
             <Btn
               type="button"
               onClick={() => {
